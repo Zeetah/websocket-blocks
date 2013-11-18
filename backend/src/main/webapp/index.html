@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Websocket blocks</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <link href="assets/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/common/blocks.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="container">
+      
+    </div>
+
+    <!-- 3rd party -->
+    <script src="assets/lib/jquery/jquery.js"></script>
+    <script src="assets/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="assets/lib/sockjs/sockjs.js"></script>
+    <script src="assets/lib/stomp/dist/stomp.js"></script>
+
+    <script type="text/javascript">
+      (function() {
+        var socket = new SockJS('/websocket-blocks/blocks');
+        var stompClient = Stomp.over(socket);
+
+        console.log(stompClient);
+        
+        stompClient.connect('', '', function(frame) {
+        	$('#container').append($('<div>').html('stomp connected'));
+        	
+        	stompClient.subscribe("/app/blocks", function(message) {
+        		var blocks = JSON.parse(message.body)
+		   
+		   		$(blocks).each(function(index, block) {
+		   			$('#container').append(
+		   				$('<div>')
+		   				.addClass('block my')
+		   				.css({
+		   					background: 'red',
+		   					width: '100px',
+		   					height: '20px',
+		   					position: 'absolute',
+		   					top: block.y,
+		   					left: block.x
+		   				})
+		   				.html(block.name)
+		   			);
+		   		});
+		    });
+		    
+		    stompClient.subscribe('/topic/user.block', function(message) {
+		    	var block = JSON.parse(message.body),
+		    		blocks = $('.block');
+		    	
+		    	$(blocks).each(function(index, b) {
+		    		var $block = $(b);
+		    		if($block.html() === block.name) {
+		    			$block.css({
+		    				top: block.y,
+		   					left: block.x
+		    			});
+		    		}
+		    	});
+		    });
+		    
+		    $('#container').on('click', '.my.block', function(event) {
+		    	var target = $(event.currentTarget);
+		    	
+		    	stompClient.send("/app/block/move", {}, JSON.stringify({
+		    		name: target.html(),
+		    		x: Math.floor(Math.random(1)*500),
+		    		y: Math.floor(Math.random(1)*500)
+		    	}));
+		    });
+        });
+      })();
+    </script>
+
+  </body>
+</html>
