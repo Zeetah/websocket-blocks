@@ -15,10 +15,13 @@
  */
 package com.zeetah.blocks.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
  * @author Rob Winch
@@ -42,12 +45,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.formLogin()
 				.defaultSuccessUrl("/index.html")
+				.successHandler(successHandler())
 				.loginPage("/login.html")
-				.failureUrl("/login.html?error")
+				.failureHandler(failureHandler())
 				.permitAll();
 	}
 
+	@Bean
+	public AuthenticationFailureHandler failureHandler() {
+		return new BlocksAuthenticationErrorHandler();
+	}
 
+	@Bean
+	public AuthenticationSuccessHandler successHandler() {
+		return new BlocksAuthenticationSuccessHandler();
+	}
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth

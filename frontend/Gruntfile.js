@@ -7,6 +7,8 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 module.exports = function (grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
@@ -45,8 +47,34 @@ module.exports = function (grunt) {
                 port: 9000,
                 livereload: 35729,
                 // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: '0.0.0.0',
+                middleware: function (connect, options) {
+                    var middlewares = [];
+                    var directory = options.directory || options.base[options.base.length - 1];
+                    if (!Array.isArray(options.base)) {
+                    options.base = [options.base];
+                    }
+                    options.base.forEach(function(base) {
+                    // Serve static files.
+                    middlewares.push(connect.static(base));
+                    });
+                    // Make directory browse-able.
+                    middlewares.push(connect.directory(directory));
+
+                    var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                    middlewares.unshift(proxy);
+                    return middlewares;
+                }
             },
+            proxies: [
+                {
+                    context: '/websocket-blocks',
+                    host: '127.0.0.1',
+                    port: 8080,
+                    https: false,
+                    changeOrigin: false
+                }
+            ],
             livereload: {
                 options: {
                     open: true,
@@ -160,6 +188,25 @@ module.exports = function (grunt) {
             app: {
                 html: '<%= yeoman.app %>/index.html',
                 ignorePath: '<%= yeoman.app %>/'
+            }
+        },
+        requirejs: {
+            dist: {
+                // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
+                options: {
+                    // `name` and `out` is set by grunt-usemin
+                    baseUrl: '<%= yeoman.app %>/scripts',
+                    optimize: 'none',
+                    // TODO: Figure out how to make sourcemaps work with grunt-usemin
+                    // https://github.com/yeoman/grunt-usemin/issues/30
+                    //generateSourceMaps: true,
+                    // required to support SourceMaps
+                    // http://requirejs.org/docs/errors.html#sourcemapcomments
+                    preserveLicenseComments: false,
+                    useStrict: true,
+                    wrap: true
+                    //uglify2: {} // https://github.com/mishoo/UglifyJS2
+                }
             }
         },
         rev: {
@@ -306,6 +353,7 @@ module.exports = function (grunt) {
             'clean:server',
             'concurrent:server',
             'autoprefixer',
+            'configureProxies',
             'connect:livereload',
             'watch'
         ]);
@@ -329,6 +377,7 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
+        'requirejs',
         'concat',
         'cssmin',
         'uglify',
@@ -343,4 +392,6 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
+
+    grunt.loadNpmTasks('grunt-connect-proxy');
 };
