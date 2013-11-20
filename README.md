@@ -1,6 +1,8 @@
 websocket-blocks
 ================
 
+Small Spring 4 Websocket example app with JavaScript frontend application.
+
 ## Dependencies
 - Java 8, might work with Java 7
 - Grunt http://gruntjs.com/
@@ -23,11 +25,13 @@ bower install
 
 In backend folder run:
 ```
+// stars backend server
 mvn clean jetty:run
 ```
 
 At the same time in frontend folder run:
 ```
+// starts frontend server and watch tasks
 grunt server
 ```
 
