@@ -1,19 +1,10 @@
 package com.zeetah.blocks.protocol;
 
-public class MoveRequest {
-	private String name;
+public class AddRequest {
 	private int x;
 	private int y;
 
-	public MoveRequest() {
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public AddRequest() {
 	}
 
 	public int getX() {

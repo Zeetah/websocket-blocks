@@ -10,6 +10,7 @@ define([
         init: function init(selector, opts) {
             var self = this;
             self.$elem = $(selector);
+            self.$elem.removeClass('hidden');
             self.successCallback = opts.initApplication;
 
             var form = self.$elem.find('form');

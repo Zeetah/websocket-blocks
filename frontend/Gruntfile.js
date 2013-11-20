@@ -14,7 +14,6 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
-
     grunt.initConfig({
         // configurable paths
         yeoman: {
@@ -52,13 +51,11 @@ module.exports = function (grunt) {
                     var middlewares = [];
                     var directory = options.directory || options.base[options.base.length - 1];
                     if (!Array.isArray(options.base)) {
-                    options.base = [options.base];
+                        options.base = [options.base];
                     }
                     options.base.forEach(function(base) {
-                    // Serve static files.
-                    middlewares.push(connect.static(base));
+                        middlewares.push(connect.static(base));
                     });
-                    // Make directory browse-able.
                     middlewares.push(connect.directory(directory));
 
                     var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
@@ -392,6 +389,4 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
-
-    grunt.loadNpmTasks('grunt-connect-proxy');
 };

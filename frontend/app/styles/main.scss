@@ -1,11 +1,50 @@
 $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 
 @import 'sass-bootstrap/lib/bootstrap';
+@import 'compass/css3';
+
+html, body, .container {
+    @include user-select(none);
+}
 
 .container {
     width: 100%;
 
     .row {
         margin-bottom: 10px;
+    }
+
+    #application {
+        position: relative;
+        .block {
+            color: #fff;
+            text-align: center;
+            background: #ff0000;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            cursor: pointer;
+
+            .text {
+                line-height: 50px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .remove {
+                width: 20px;
+                height: 20px;
+                background: #ff0000;
+                color: #fff;
+                position: absolute;
+                right: -20px;
+                top: 0;
+            }
+
+            &.my {
+                color: #000;
+                background: #00ff00;
+            }
+        }
     }
 }

@@ -1,25 +1,8 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.zeetah.blocks.controller;
 
 import java.security.Principal;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -28,15 +11,14 @@ import org.springframework.messaging.simp.annotation.SubscribeEvent;
 import org.springframework.stereotype.Controller;
 
 import com.zeetah.blocks.model.Block;
+import com.zeetah.blocks.protocol.AddRequest;
 import com.zeetah.blocks.protocol.MoveRequest;
+import com.zeetah.blocks.protocol.RemoveRequest;
 import com.zeetah.blocks.service.BlockService;
 
 
 @Controller
 public class BlockController {
-
-	private static final Log logger = LogFactory.getLog(BlockController.class);
-
 	private final BlockService blockService;
 
 	@Autowired
@@ -44,14 +26,34 @@ public class BlockController {
 		this.blockService = blockService;
 	}
 
-	@SubscribeEvent("/blocks")
+	@SubscribeEvent("/user")
+	public Principal getUser(Principal principal) throws Exception {
+		return principal;
+	}
+	
+	@SubscribeEvent("/blocks.my")
 	public List<Block> getBlocks(Principal principal) throws Exception {
 		return blockService.getBlocks(principal);
+	}
+	
+	@SubscribeEvent("/blocks.other")
+	public List<Block> getOtherBlocks(Principal principal) throws Exception {
+		return blockService.getOtherBlocks(principal);
 	}
 	
 	@MessageMapping(value = "/block/move")
 	public void moveBlock(MoveRequest move, Principal principal) {
 		blockService.move(principal, move);
+	}
+	
+	@MessageMapping(value = "/block/add")
+	public void addBlock(AddRequest add, Principal principal) {
+		blockService.add(principal, add);
+	}
+	
+	@MessageMapping(value = "/block/remove")
+	public void addBlock(RemoveRequest remove, Principal principal) {
+		blockService.remove(principal, remove);
 	}
 
 	@MessageExceptionHandler

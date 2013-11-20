@@ -4,6 +4,7 @@ public class Block {
 	int x;
 	int y;
 	String name;
+	String user;
 	
 	public Block(String name, int x, int y) {
         this.name = name;
@@ -17,6 +18,14 @@ public class Block {
         this.y = y;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -27,10 +27,8 @@ require([
     'use strict';
     
     $.getJSON('websocket-blocks/blocks/info').done(function() {
-        $('#login').remove();
-        console.log(App.prototype);
         new App('#application');
-    }).fail(function(){
+    }).fail(function() {
         new Login('#login', {
             initApplication: function() {
                 new App('#application');

@@ -30,7 +30,9 @@ define([
         subscribe: function subscribe(path, callback) {
             var self = this;
             $.when(this.deferred.promise()).then(function() {
-                self.stompClient.subscribe(path, callback);
+                self.stompClient.subscribe(path, function(message) {
+                    callback(JSON.parse(message.body), message.headers);
+                });
             });
         },
 
