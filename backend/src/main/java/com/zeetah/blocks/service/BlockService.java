@@ -28,13 +28,13 @@ public class BlockService {
 		this.messagingTemplate = messagingTemplate;
 
 		UserCanvas canvas = new UserCanvas();
-		canvas.addBlock(new Block("blo1", 0, 0));
-		canvas.addBlock(new Block("blo2", 100, 100));
+		canvas.addBlock(new Block("blo1", 20, 40));
+		canvas.addBlock(new Block("blo2", 200, 100));
 		this.canvases.put("block", canvas);
 
 		canvas = new UserCanvas();
-		canvas.addBlock(new Block("soc1", 0, 50));
-		canvas.addBlock(new Block("soc2", 50, 100));
+		canvas.addBlock(new Block("soc1", 30, 150));
+		canvas.addBlock(new Block("soc2", 180, 250));
 		this.canvases.put("socket", canvas);
 	}
 
