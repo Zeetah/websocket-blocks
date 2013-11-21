@@ -22,8 +22,6 @@
       (function() {
         var socket = new SockJS('/websocket-blocks/blocks');
         var stompClient = Stomp.over(socket);
-
-        console.log(stompClient);
         
         stompClient.connect('', '', function(frame) {
         	$('#container').append($('<div>').html('stomp connected'));
@@ -46,31 +44,6 @@
 		   				.html(block.name)
 		   			);
 		   		});
-		    });
-		    
-		    stompClient.subscribe('/topic/user.block', function(message) {
-		    	var block = JSON.parse(message.body),
-		    		blocks = $('.block');
-		    	
-		    	$(blocks).each(function(index, b) {
-		    		var $block = $(b);
-		    		if($block.html() === block.name) {
-		    			$block.css({
-		    				top: block.y,
-		   					left: block.x
-		    			});
-		    		}
-		    	});
-		    });
-		    
-		    $('#container').on('click', '.my.block', function(event) {
-		    	var target = $(event.currentTarget);
-		    	
-		    	stompClient.send("/app/block/move", {}, JSON.stringify({
-		    		name: target.html(),
-		    		x: Math.floor(Math.random(1)*500),
-		    		y: Math.floor(Math.random(1)*500)
-		    	}));
 		    });
         });
       })();

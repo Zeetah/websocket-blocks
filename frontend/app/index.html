@@ -3,56 +3,63 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Websocket-Blocks</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-        <link rel="stylesheet" href="styles/main.css">
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <script src="scripts/vendor/stomp.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h3 class="text-muted">Websocket-Blocks</h3>
-            </div>
+      <head>
+          <meta charset="utf-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <title>Websocket-Blocks</title>
+          <meta name="description" content="">
+          <meta name="viewport" content="width=device-width">
+          <link rel="stylesheet" href="styles/main.css">
+          <script src="bower_components/modernizr/modernizr.js"></script>
+          <script src="scripts/vendor/stomp.js"></script>
+      </head>
+      <body>
+            <div class="container">
+                <div class="header">
+                    <h3 class="text-muted">Websocket-Blocks</h3>
+                </div>
 
-            <div id="application" class="hidden">
-              <button class="add">Add block</add>
-            </div>
+                <div id="application" class="hidden">
+                    <button class="add">Add block</add>
+                </div>
 
-            <div id="login" class="hidden">
-                <div class="simple-container">
-                  <form class="form-signin" method="post">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h2 class="muted form-signin-heading">Please sign in</h2>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <input type="text" class="form-control" placeholder="User name" name="username">
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <input type="password" class="form-control" placeholder="Password" name="password">
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <button class="btn btn-lg btn-block btn-danger" type="submit">Sign in</button>
-                      </div>
-                    </div>
-                  </form>
-                    <div class="alert hidden">
-                        Login failed
+                <div id="login" class="hidden">
+                    <div class="simple-container">
+                        <form class="form-signin" method="post">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h2 class="muted form-signin-heading">Please sign in</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input type="text" class="form-control" placeholder="User name" name="username">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <input type="password" class="form-control" placeholder="Password" name="password">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p class="text-info alert hidden"><small>
+                                        <strong>Login unsuccessful!</strong>
+                                    </small></p>
+                                    <button class="btn btn-lg btn-block btn-danger" type="submit">Sign in</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <p class="text-info">
+                            <small>
+                                Log in as <strong>socket/socket12</strong> or <strong>block/block12</strong><br>
+                                See <code>WebSecurityConfig.java</code>
+                            </small>
+                        </p>
                     </div>
                 </div>
-            </div>
-        </div>
-        <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
-</body>
+          </div>
+          <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+    </body>
 </html>
