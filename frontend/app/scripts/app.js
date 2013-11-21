@@ -24,19 +24,11 @@ define([
                 self.handleBlocks.apply(self, arguments);
             });
 
-            self.client.subscribe('/app/blocks.other', function() {
-                self.handleOtherBlocks.apply(self, arguments);
-            });
-
-            self.client.subscribe('/topic/user.block', function() {
-                self.handleBlock.apply(self, arguments);
-            });
-
-            self.client.subscribe('/topic/user.block.add', function() {
+            self.client.subscribeWithSuffix('/queue/user.block.add', function() {
                 self.handleAddBlock.apply(self, arguments);
             });
 
-            self.client.subscribe('/topic/user.block.remove', function() {
+            self.client.subscribeWithSuffix('/queue/user.block.remove', function() {
                 self.handleRemoveBlock.apply(self, arguments);
             });
 
@@ -78,7 +70,6 @@ define([
 
             $blockElem.find('.text').html(block.name);
 
-            $()
             this.blocks.push($blockElem);
             this.$elem.append($blockElem);
         },
@@ -127,15 +118,6 @@ define([
         setupDomListeners: function setupDomListeners() {
             var self = this;
 
-            /*self.$elem.on('click', '.my.block .text', function(event) {
-                var $target = $(event.currentTarget).parent();
-                self.client.send('/app/block/move', {
-                    name: $target.attr('data-id'),
-                    x: Math.floor(Math.random(1) * ($(window).width() - 50)),
-                    y: Math.floor(Math.random(1) * ($(window).height() - 140))
-                });
-            });*/
-
             self.$elem.on('click', '.my.block .remove', function(event) {
                 var $target = $(event.currentTarget).closest('.block');
                 self.client.send('/app/block/remove', {
@@ -147,36 +129,6 @@ define([
                 self.client.send('/app/block/add', {
                     x: Math.floor(Math.random(1) * ($(window).width() - 50)),
                     y: Math.floor(Math.random(1) * ($(window).height() - 140))
-                });
-            });
-
-            self.$elem.hammer().on('drag', '.my.block', function(event) {
-                var touches = event.gesture.touches;
-                event.gesture.preventDefault();
-
-                _.each(touches, function(touch, index) {
-                    var $target = $(touches[index].target).closest('.block');
-                    self.target = $target.attr('data-id');
-                    $target.css({
-                        left: touches[index].pageX - 40,
-                        top: touches[index].pageY - 82
-                    });
-                    self.client.send('/app/block/move', {
-                        name: $target.attr('data-id'),
-                        x: $target.position().left,
-                        y: $target.position().top
-                    });
-                });
-            });
-
-            self.$elem.hammer().on('dragend', '.my.block', function(event) {
-                self.target = undefined;
-                event.gesture.preventDefault();
-                var $target = $(event.currentTarget).closest('.block');
-                self.client.send('/app/block/move', {
-                    name: $target.attr('data-id'),
-                    x: $target.position().left,
-                    y: $target.position().top
                 });
             });
         }

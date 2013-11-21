@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.zeetah.blocks.model.UserCanvas;
 import com.zeetah.blocks.model.Block;
 import com.zeetah.blocks.protocol.AddRequest;
-import com.zeetah.blocks.protocol.MoveRequest;
 import com.zeetah.blocks.protocol.RemoveRequest;
 
 @Service
@@ -51,23 +50,6 @@ public class BlockService {
 		return canvas.getBlocks();
 	}
 
-	public List<Block> getOtherBlocks(Principal principal) {
-		List<Block> blocks = new ArrayList<Block>();
-		for (Map.Entry<String, UserCanvas> entry : this.canvases.entrySet()) {
-			if (!entry.getKey().equals(principal.getName())) {
-				UserCanvas canvas = (UserCanvas) entry.getValue();
-				blocks.addAll(canvas.getBlocks());
-			}
-		}
-		return blocks;
-	}
-
-	public void move(Principal principal, MoveRequest move) {
-		UserCanvas canvas = findCanvas(principal.getName());
-		Block block = canvas.move(move);
-		messagingTemplate.convertAndSend("/topic/user.block", block);
-	}
-
 	public void add(Principal principal, AddRequest add) {
 		UserCanvas canvas = findCanvas(principal.getName());
 
@@ -77,14 +59,14 @@ public class BlockService {
 		canvas.addBlock(newBlock);
 		newBlock.setUser(principal.getName());
 		this.canvases.put(principal.getName(), canvas);
-		messagingTemplate.convertAndSend("/topic/user.block.add", newBlock);
+		messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/user.block.add", newBlock);
 	}
 
 	public void remove(Principal principal, RemoveRequest remove) {
 		UserCanvas canvas = findCanvas(principal.getName());
 		canvas.remove(remove.getName());
 		this.canvases.put(principal.getName(), canvas);
-		messagingTemplate.convertAndSend("/topic/user.block.remove", remove);
+		messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/user.block.remove", remove);
 	}
 
 	private String getName(String name, int id) {

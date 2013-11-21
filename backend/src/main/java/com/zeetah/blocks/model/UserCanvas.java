@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zeetah.blocks.protocol.MoveRequest;
-
 
 public class UserCanvas {
 
@@ -36,16 +34,6 @@ public class UserCanvas {
 
 	public Block getBlock(String name) {
 		return blocks.get(name);
-	}
-
-	public Block move(MoveRequest move) {
-		Block block = blocks.get(move.getName());
-		if ((block == null) || (move.getX() == 0) || (move.getY() == 0)) {
-			return null;
-		}
-		block = new Block(block, move.getX(), move.getY());
-		blocks.put(move.getName(), block);
-		return block;
 	}
 
 	public void remove(String name) {

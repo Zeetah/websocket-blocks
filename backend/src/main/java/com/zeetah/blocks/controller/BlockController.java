@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 
 import com.zeetah.blocks.model.Block;
 import com.zeetah.blocks.protocol.AddRequest;
-import com.zeetah.blocks.protocol.MoveRequest;
 import com.zeetah.blocks.protocol.RemoveRequest;
 import com.zeetah.blocks.service.BlockService;
 
@@ -34,16 +33,6 @@ public class BlockController {
 	@SubscribeEvent("/blocks.my")
 	public List<Block> getBlocks(Principal principal) throws Exception {
 		return blockService.getBlocks(principal);
-	}
-	
-	@SubscribeEvent("/blocks.other")
-	public List<Block> getOtherBlocks(Principal principal) throws Exception {
-		return blockService.getOtherBlocks(principal);
-	}
-	
-	@MessageMapping(value = "/block/move")
-	public void moveBlock(MoveRequest move, Principal principal) {
-		blockService.move(principal, move);
 	}
 	
 	@MessageMapping(value = "/block/add")

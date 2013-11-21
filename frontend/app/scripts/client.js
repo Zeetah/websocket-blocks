@@ -36,6 +36,15 @@ define([
             });
         },
 
+        subscribeWithSuffix: function subscribeWithSuffix(path, callback) {
+            var self = this;
+            $.when(this.deferred.promise()).then(function() {
+                self.stompClient.subscribe(path + self.suffix, function(message) {
+                    callback(JSON.parse(message.body), message.headers);
+                });
+            });
+        },
+
         send: function send(path, opts, callback) {
             var self = this;
             $.when(this.deferred.promise()).then(function() {
