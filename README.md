@@ -4,7 +4,7 @@ websocket-blocks
 Small Spring 4 Websocket example app with JavaScript frontend application.
 
 ## Dependencies
-- Java 8, might work with Java 7
+- Java 7
 - Grunt http://gruntjs.com/
 - Node http://nodejs.org/
 - Ruby https://www.ruby-lang.org/en/downloads/
